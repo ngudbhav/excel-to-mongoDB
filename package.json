@@ -1,0 +1,24 @@
+{
+  "name": "excel-to-mongodb",
+  "version": "0.1.0",
+  "description": "A node module to covert a spreadsheet of Excel to a collection in MongoDB.",
+  "main": "index.js",
+  "scripts": {
+    "test": "node test/test.js",
+    "prepublish":"npm test"
+  },
+  "engines": {
+    "node": ">=4.2.4"
+  },
+  "keywords":"excel, mongo, db, mongoose, covert, exceltomongo, excel-to-mongodb",
+  "author": "Udbhav Gambhir <ngudbhav05@hotmail.com> (https://www.ngudbhav.me)",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ngudbhav/excel-to-mysql.git"
+  },
+  "dependencies": {
+    "mongoose": "^5.3.3",
+    "read-excel-file": "^2.0.5"
+  }
+}
