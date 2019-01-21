@@ -54,6 +54,11 @@ The second one is an optional argument of options with default values as follows
 ```sh
 var options = {
 	verbose: false //Console.log the row number as per the excel file, if true.
+	customStartEnd: false //Custom insert the row and columns rather than full excel-file.
+	startRow: <required> //Valid only if customStartEnd is true. Defines the start Row of the data.
+	endRow: <required> //Valid only if customStartEnd is true. Defines the end Row of the data.
+	startCol: <required> //Valid only if customStartEnd is true. Defines the start Column of the data.
+	endCol: <required> //Valid only if customStartEnd is true. Defines the end Column of the data.
 }
 ```
 The third argument is the callback function which should be executed.

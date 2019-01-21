@@ -28,7 +28,10 @@ exports.covertToMongo = function(data, options, callback){
 	}
 	noOfOperations = 0;
 	return new Promise((resolve, reject) => {
-		console.log(data);
+		var sRow = 0;
+		var eRow = 0;
+		var sCol = 0;
+		var eCol = 0;
 		var connectionString = 'mongodb://'+data.host+':27017/'+data.db;
 		mongoose.connect(connectionString);
 		if(options.verbose === true){
@@ -39,19 +42,35 @@ exports.covertToMongo = function(data, options, callback){
 		readExcel(fs.createReadStream(data.path)).then((rows) => {
 			var progress = 1;
 			var schema = {};
-			for(var i in rows[0]){
+			if(options.customStartEnd === true){
+				if(options.startRow && options.startCol && options.endRow && options.endCol){
+					sRow = options.startRow-1;
+					eRow = options.endRow;
+					sCol = options.startCol-1;
+					eCol = options.endCol;
+				}
+				else{
+					reject("Custom Start End requires all 4 points to be declared, i.e., Start Row, Start Column, End Row, End Column. It Seems one or more end points are not declared.");
+					return callback("Custom Start End requires all 4 points to be declared, i.e., Start Row, Start Column, End Row, End Column. It Seems one or more end points are not declared.");
+				}
+			}
+			else{
+				eCol = rows[0].length;
+				eRow = rows.length;
+			}
+			for(var i=sCol;i<eCol;i++){
 				noOfOperations = 0;
-				rows[0][i] = rows[0][i].split(" ").join("_");
-				if(typeof(rows[1][i]) === 'number'){
-					schema[rows[0][i]] = 'Number';
+				rows[sRow][i] = rows[sRow][i].split(" ").join("_");
+				if(typeof(rows[sRow+1][i]) === 'number'){
+					schema[rows[sRow][i]] = 'Number';
 				}
-				else if(typeof(rows[1][i]) === 'string'){
-					schema[rows[0][i]] = 'String';
+				else if(typeof(rows[sRow+1][i]) === 'string'){
+					schema[rows[sRow][i]] = 'String';
 				}
-				else if(typeof(rows[1][i]) === 'object'){
-					if(isDate(rows[1][i])){
-						schema[rows[0][i]] = 'Date';
-						for(var j=1;j<rows.length;j++){
+				else if(typeof(rows[sRow+1][i]) === 'object'){
+					if(isDate(rows[sRow+1][i])){
+						schema[rows[sRow][i]] = 'Date';
+						for(var j=sRow+1;j<eRow;j++){
 							rows[j][i] = formatDate(rows[j][i]);
 						}
 					}
@@ -60,25 +79,29 @@ exports.covertToMongo = function(data, options, callback){
 						return callback(error);
 					}
 				}
-				else if(typeof(rows[1][i])==='boolean'){
-					schema[rows[0][i]] = 'Boolean';
+				else if(typeof(rows[sRow+1][i])==='boolean'){
+					schema[rows[sRow][i]] = 'Boolean';
 				}
 			}
 			console.log(schema);
 			var t = require('./modelCreateApi').createModel(schema, data.collection);
 			var colData = [];
-			for(var i=1;i<rows.length;i++){
+			for(var i=sRow+1;i<eRow;i++){
 				var obj = {};
 				for(var j in rows[i]){
-					obj[rows[0][j]] = rows[i][j];
+					obj[rows[sRow][j]] = rows[i][j];
 				}
 				colData.push(obj);
 			}
-			console.log(colData);
 			t.insertMany(colData, function(error, results){
 				if(error){
 					resolve(error);
 					return callback(error);
+				}
+				else{
+					mongoose.connection.close();
+					resolve(results);
+					return callback(null, results);
 				}
 			});
 		});
