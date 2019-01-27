@@ -99,6 +99,7 @@ exports.covertToMongo = function(data, options, callback){
 					return callback(error);
 				}
 				else{
+					delete mongoose.connection.models[t];
 					mongoose.connection.close();
 					resolve(results);
 					return callback(null, results);
