@@ -5,12 +5,12 @@
   "main": "index.js",
   "scripts": {
     "test": "node test/test.js",
-    "prepublish":"npm test"
+    "prepublish": "npm test"
   },
   "engines": {
     "node": ">=4.2.4"
   },
-  "keywords":"excel, mongo, db, mongoose, covert, exceltomongo, excel-to-mongodb",
+  "keywords": "excel, mongo, db, mongoose, covert, exceltomongo, excel-to-mongodb",
   "author": "Udbhav Gambhir <ngudbhav05@hotmail.com> (https://www.ngudbhav.me)",
   "license": "MIT",
   "repository": {
@@ -18,6 +18,7 @@
     "url": "git+https://github.com/ngudbhav/excel-to-mysql.git"
   },
   "dependencies": {
+    "csvtojson": "^2.0.8",
     "mongoose": "^5.3.3",
     "read-excel-file": "^2.0.5"
   }

@@ -1,8 +1,8 @@
 # excel-to-mongoDB 
-This module converts your correctly formatted Excel spreadsheet to a collection in specified database in MongoDB.
+This module converts your correctly formatted Excel spreadsheet to a collection in specified database in MongoDB. The queries can also be written in a file (BETA).
 
 # Excel Formats Supported
-Supported Excel formats are XLS/XLSX
+Supported Excel formats are XLS/XLSX/CSV
 
 # Spreadsheet Format
 Please have a look at the sample Excel sheets provided to have a clear view of the File. <a href="https://go.microsoft.com/fwlink/?LinkID=521962">Microsoft Sample Sheet</a>
@@ -54,7 +54,7 @@ The second one is an optional argument of options with default values as follows
 ```sh
 var options = {
 	verbose: false //Console.log the row number as per the excel file, if true.
-	customStartEnd: false //Custom insert the row and columns rather than full excel-file.
+	customStartEnd: false //Custom insert the row and columns rather than full excel-file. Do take care! Specifying endRow or endCol may result in insertion of redundant data.
 	startRow: <required> //Valid only if customStartEnd is true. Defines the start Row of the data.
 	endRow: <required> //Valid only if customStartEnd is true. Defines the end Row of the data.
 	startCol: <required> //Valid only if customStartEnd is true. Defines the start Column of the data.
@@ -71,4 +71,4 @@ excelMongo.covertToMongo(credentials, options, callback);
 We have got you covered! <a href="https://github.com/ngudbhav/excel-to-mysql">Github Link</a>.
 
 # Want to use the GUI instead?
-We have got you covered! <a href="https://github.com/ngudbhav/excel-to-mysql-electron-app">Github Link</a>.
+We have got you covered! <a href="https://github.com/ngudbhav/TriCo-electron-app">Github Link</a>.
