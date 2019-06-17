@@ -39,7 +39,7 @@ exports.covertToMongo = function(data, options, callback){
 			if(options.verbose){
 				console.log('Backing up Database');
 			}
-			exec('mongodump --host '+data.host+' --db '+data.db, function(error, stdout, stderr){
+			exec('mongodump --host '+data.host+' --db '+data.db+' --out '+'\"'+path.resolve(process.cwd())+'\"', function(error, stdout, stderr){
 				if(error){
 					if(options.verbose){
 						console.log(error);
