@@ -5,7 +5,6 @@ var readExcel = require('read-excel-file/node');
 var fs = require('fs');
 var mongoose = require('mongoose');
 const csv=require('csvtojson');
-var backup = require('mongodb-backup');
 var exec = require('child_process').exec;
 
 function formatDate(date) {
