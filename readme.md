@@ -1,5 +1,5 @@
 # excel-to-mongoDB 
-This module converts your correctly formatted Excel spreadsheet to a collection in specified database in MongoDB. The queries can also be written in a file (BETA).
+This module converts your correctly formatted Excel spreadsheet to a collection in specified database in MongoDB.
 
 # Excel Formats Supported
 Supported Excel formats are XLS/XLSX/CSV
@@ -53,7 +53,8 @@ var credentials = {
 The second one is an optional argument of options with default values as follows.
 ```sh
 var options = {
-	verbose: false //Console.log the row number as per the excel file, if true.
+	safeMode: false //Backup the db to the current working directory in dump/<db> folder.
+	verbose: false //Console.log the current step processing.
 	customStartEnd: false //Custom insert the row and columns rather than full excel-file. Do take care! Specifying endRow or endCol may result in insertion of redundant data.
 	startRow: <required> //Valid only if customStartEnd is true. Defines the start Row of the data.
 	endRow: <required> //Valid only if customStartEnd is true. Defines the end Row of the data.
@@ -64,7 +65,18 @@ var options = {
 The third argument is the callback function which should be executed.
 
 ```sh
-excelMongo.covertToMongo(credentials, options, callback);
+excelMongo.covertToMongo(credentials, options, callback); //returns documents inserted in the database.
+```
+
+#Error in safeMode option
+```
+Windows users need to add the following path to the environment path variable.
+C:\Program Files\MongoDB\Server\<version>\bin
+
+Right click 'This PC', head to 'properties' and 'Advanced System Settings'. From there, Click on 'Environment Variables'. Under System Variables, Search for 'PATH'. Double click the entry, click on new and add the above path.
+Restart your console and you should be good to go.
+
+Linux/Unix Users please check your installation or .bashrc.
 ```
 
 # Want to covert to MYSQL instead?

@@ -5,6 +5,8 @@ var readExcel = require('read-excel-file/node');
 var fs = require('fs');
 var mongoose = require('mongoose');
 const csv=require('csvtojson');
+var backup = require('mongodb-backup');
+var exec = require('child_process').exec;
 
 function formatDate(date) {
 	var d = new Date(date),
@@ -34,6 +36,32 @@ exports.covertToMongo = function(data, options, callback){
 		var sCol = 0;
 		var eCol = 0;
 		var connectionString = 'mongodb://'+data.host+':27017/'+data.db;
+		if(options.safeMode){
+			if(options.verbose){
+				console.log('Backing up Database');
+			}
+			exec('mongodump --host '+data.host+' --db '+data.db, function(error, stdout, stderr){
+				if(error){
+					if(options.verbose){
+						console.log(error);
+					}
+					if(process.platform == 'win32'){
+						reject('It seems that mongo\'s bin is not in your environment path. Go to https://github.com/ngudbhav/excel-tomongodb to see the steps to rectify this issue.');
+						return callback('It seems that mongo\'s bin is not in your environment path. Go to https://github.com/ngudbhav/excel-tomongodb to see the steps to rectify this issue.');
+					}
+					else{
+						reject('There seems to be an issue with your mongodb installation as we are unable to find mongodump file in environment path.');
+						return callback('There seems to be an issue with your mongodb installation as we are unable to find mongodump file in environment path.');
+					}
+				}
+				else{
+					if(options.verbose){
+						console.log(stderr);
+						console.log(stdout);
+					}
+				}
+			});
+		}
 		mongoose.connect(connectionString, function(error){
 			if(error){
 				reject(error);
@@ -54,7 +82,6 @@ exports.covertToMongo = function(data, options, callback){
 						})
 						.fromString(sdata)
 						.then((rows)=>{
-							console.log(rows);
 							var progress = 1;
 							var schema = {};
 							if(options.customStartEnd === true){

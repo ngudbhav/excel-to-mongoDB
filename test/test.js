@@ -9,7 +9,7 @@ var data = {
 	db: "ug"
 };
 
-excelToMYSQL.covertToMongo(data, {verbose:true, customStartEnd: false, startRow:1, startCol: 1, endRow: 100, endCol: 10}, function(error, results){
+excelToMYSQL.covertToMongo(data, {safeMode:false,verbose:true, customStartEnd: false, startRow:1, startCol: 1, endRow: 100, endCol: 10}, function(error, results){
 	if(error) throw error;
 	else{
 		console.log(results);
