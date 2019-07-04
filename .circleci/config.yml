@@ -3,7 +3,7 @@
   build:
     docker:
       - image: circleci/node:8.10.0-stretch
-      - image: circleci/mongo:3.4.3
+      - image: circleci/mongo:3.6
     steps:
       - checkout
       - run:
