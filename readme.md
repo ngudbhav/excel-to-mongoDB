@@ -1,4 +1,8 @@
 # excel-to-mongoDB 
+<br>
+[![Build Status](https://travis-ci.com/ngudbhav/excel-to-mongoDB.svg?branch=master)](https://travis-ci.com/ngudbhav/excel-to-mongoDB)
+[![CircleCI](https://circleci.com/gh/ngudbhav/excel-to-mongoDB.svg?style=svg)](https://circleci.com/gh/ngudbhav/excel-to-mongoDB)
+
 This module converts your correctly formatted Excel spreadsheet to a collection in specified database in MongoDB.
 
 # Excel Formats Supported
