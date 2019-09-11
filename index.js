@@ -8,6 +8,7 @@ const csv=require('csvtojson');
 var exec = require('child_process').exec;
 var path = require('path');
 
+//format the date to mongodb format
 function formatDate(date) {
 	var d = new Date(date),
 	month = '' + (d.getMonth() + 1),
@@ -20,11 +21,14 @@ function formatDate(date) {
 
 var noOfOperations = 0;
 
+//Check if the object is date
 function isDate(d){
 	return d instanceof Date && !isNaN(d);
 }
 
+//Convert to mongodb
 exports.covertToMongo = function(data, options, callback){
+	//optional parameter 'options'
 	if(typeof options === 'function'){
 		callback = options;
 		options = {};
@@ -40,6 +44,7 @@ exports.covertToMongo = function(data, options, callback){
 			if(options.verbose){
 				console.log('Backing up Database');
 			}
+			//Dump the database in case safe mode is set
 			exec('mongodump --host '+data.host+' --db '+data.db+' --out '+'\"'+path.resolve(process.cwd())+'\"', function(error, stdout, stderr){
 				if(error){
 					if(options.verbose){
@@ -62,6 +67,7 @@ exports.covertToMongo = function(data, options, callback){
 				}
 			});
 		}
+		//Try to connect with the provided credentials
 		mongoose.connect(connectionString, function(error){
 			if(error){
 				reject(error);
@@ -74,6 +80,7 @@ exports.covertToMongo = function(data, options, callback){
 					});
 				}
 				var d = (data.path).toString().slice(data.path.toString().length-3, data.path.toString().length);
+				//Get the extension of the input file
 				if(d == 'csv' || d == 'CSV'){
 					fs.readFile(data.path, 'utf8', function(error, sdata){
 						csv({
@@ -85,6 +92,7 @@ exports.covertToMongo = function(data, options, callback){
 							var progress = 1;
 							var schema = {};
 							if(options.customStartEnd === true){
+								//No need to parse the all the rows
 								if(options.startRow && options.startCol && options.endRow && options.endCol){
 									sRow = options.startRow-1;
 									eRow = options.endRow;
@@ -100,6 +108,7 @@ exports.covertToMongo = function(data, options, callback){
 								eCol = rows[0].length;
 								eRow = rows.length;
 							}
+							//Scan the second row to check for the datatypes.
 							for(var i=sCol;i<eCol;i++){
 								noOfOperations = 0;
 								rows[sRow][i] = rows[sRow][i].split(" ").join("_");
@@ -109,6 +118,7 @@ exports.covertToMongo = function(data, options, callback){
 								else if(typeof(rows[sRow+1][i]) === 'string'){
 									schema[rows[sRow][i]] = 'String';
 								}
+								//MS Excel date is object in javascript.
 								else if(typeof(rows[sRow+1][i]) === 'object'){
 									if(isDate(rows[sRow+1][i])){
 										schema[rows[sRow][i]] = 'Date';
@@ -117,16 +127,20 @@ exports.covertToMongo = function(data, options, callback){
 										}
 									}
 									else{
+										//In case of unsupported datatype
 										reject("Datatype unrecognized");
 										return callback("Datatype unrecognized");
 									}
 								}
+								//0 or 1 also corresponds to bool
 								else if(typeof(rows[sRow+1][i])==='boolean'){
 									schema[rows[sRow][i]] = 'Boolean';
 								}
 							}
+							//Create and compile the model to enable mongoose API.
 							var t = require('./modelCreateApi').createModel(schema, data.collection);
 							var colData = [];
+							//Create insertion object to send to insertMany API of mongoose
 							for(var i=sRow+1;i<eRow;i++){
 								var obj = {};
 								for(var j in rows[i]){
@@ -134,12 +148,14 @@ exports.covertToMongo = function(data, options, callback){
 								}
 								colData.push(obj);
 							}
+							//Send the data to database
 							t.insertMany(colData, function(error, results){
 								if(error){
 									reject(error);
 									return callback(error);
 								}
 								else{
+									//Clear memory and delete the model to enable concurrent insertions
 									delete mongoose.connection.models[t];
 									mongoose.connection.close();
 									resolve(results);
@@ -150,10 +166,12 @@ exports.covertToMongo = function(data, options, callback){
 					});
 				}
 				else{
+					//If the file is in MS EXCEL format (xls/xlsx)
 					readExcel(fs.createReadStream(data.path)).then((rows) => {
 						var progress = 1;
 						var schema = {};
 						if(options.customStartEnd === true){
+							//No need to parse the all the rows
 							if(options.startRow && options.startCol && options.endRow && options.endCol){
 								sRow = options.startRow-1;
 								eRow = options.endRow;
@@ -169,6 +187,7 @@ exports.covertToMongo = function(data, options, callback){
 							eCol = rows[0].length;
 							eRow = rows.length;
 						}
+						//Scan the second row to check for the datatypes.
 						for(var i=sCol;i<eCol;i++){
 							noOfOperations = 0;
 							rows[sRow][i] = rows[sRow][i].split(" ").join("_");
@@ -178,6 +197,7 @@ exports.covertToMongo = function(data, options, callback){
 							else if(typeof(rows[sRow+1][i]) === 'string'){
 								schema[rows[sRow][i]] = 'String';
 							}
+							//MS Excel date is object in javascript.
 							else if(typeof(rows[sRow+1][i]) === 'object'){
 								if(isDate(rows[sRow+1][i])){
 									schema[rows[sRow][i]] = 'Date';
@@ -186,16 +206,20 @@ exports.covertToMongo = function(data, options, callback){
 									}
 								}
 								else{
-									reject(error);
-									return callback(error);
+									//In case of unsupported datatype
+									reject("Datatype unrecognized");
+									return callback("Datatype unrecognized");
 								}
 							}
+							//0 or 1 also corresponds to bool
 							else if(typeof(rows[sRow+1][i])==='boolean'){
 								schema[rows[sRow][i]] = 'Boolean';
 							}
 						}
+						//Create and compile the model to enable mongoose API.
 						var t = require('./modelCreateApi').createModel(schema, data.collection);
 						var colData = [];
+						//Create insertion object to send to insertMany API of mongoose
 						for(var i=sRow+1;i<eRow;i++){
 							var obj = {};
 							for(var j in rows[i]){
@@ -203,12 +227,14 @@ exports.covertToMongo = function(data, options, callback){
 							}
 							colData.push(obj);
 						}
+						//Send the data to database
 						t.insertMany(colData, function(error, results){
 							if(error){
 								reject(error);
 								return callback(error);
 							}
 							else{
+								//Clear memory and delete the model to enable concurrent insertions
 								delete mongoose.connection.models[t];
 								mongoose.connection.close();
 								resolve(results);

@@ -5,6 +5,8 @@ exports.createModel = function(schema, t){
 		return mongoose.model(t, colf);
 	}
 	catch(e) {
+		//In case of the model already exists in the memory
+		//This is added so that this package can be used with loops.
 		return mongoose.model(t);	
 	}
 }

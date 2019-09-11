@@ -2,7 +2,7 @@
   "name": "excel-to-mongodb",
   "version": "1.5.7",
   "description": "A node module to covert a spreadsheet of Excel to a collection in MongoDB.",
-  "main": "index.js",
+  "main": "index",
   "scripts": {
     "test": "node test/test.js",
     "prepublish": "npm test"
