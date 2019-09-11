@@ -117,8 +117,8 @@ exports.covertToMongo = function(data, options, callback){
 										}
 									}
 									else{
-										reject(error);
-										return callback(error);
+										reject("Datatype unrecognized");
+										return callback("Datatype unrecognized");
 									}
 								}
 								else if(typeof(rows[sRow+1][i])==='boolean'){

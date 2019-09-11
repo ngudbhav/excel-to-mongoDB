@@ -4,11 +4,12 @@ node_modules/
 # Log files
 logs/
 *.log
-
+*-lock.json
 # NPM ignore
 .eslintrc.json
 .gitignore
 .travis.yml
+.circleci/
 webpack.config.js
 test/
 docs/

@@ -1,6 +1,6 @@
 {
   "name": "excel-to-mongodb",
-  "version": "1.5.6",
+  "version": "1.5.7",
   "description": "A node module to covert a spreadsheet of Excel to a collection in MongoDB.",
   "main": "index.js",
   "scripts": {
@@ -15,7 +15,7 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/ngudbhav/excel-to-mysql.git"
+    "url": "git+https://github.com/ngudbhav/excel-to-mongodb.git"
   },
   "dependencies": {
     "csvtojson": "^2.0.8",
