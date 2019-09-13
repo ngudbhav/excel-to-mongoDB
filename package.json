@@ -20,6 +20,6 @@
   "dependencies": {
     "csvtojson": "^2.0.8",
     "mongoose": "^5.3.3",
-    "read-excel-file": "^2.0.5"
+    "read-excel-file": "^4.0.2"
   }
 }
