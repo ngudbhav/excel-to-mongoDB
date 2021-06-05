@@ -10,6 +10,7 @@ const data = {
 	user: "",
 	pass: "",
 	connection: "",
+	endConnection: true,
 };
 
 const additionalOptions = {
