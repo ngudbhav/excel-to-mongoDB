@@ -79,11 +79,12 @@ exports.covertToMongo = function(data, options, callback){
         console.log('Backing up Database');
       }
       //Dump the database in case safe mode is set
-      exec('mongodump -u ' + data.user + ' -p ' + data.pass + ' --host ' + data.host + ' --db ' + data.db + ' --out ' + '\"' + path.resolve(process.cwd()) + '\"', function(error, stdout, stderr){
+      const destination = options.destination ? options.destination : path.resolve(process.cwd())
+      exec('mongodump -u ' + data.user + ' -p ' + data.pass + ' --host ' + data.host + ' --db ' + data.db + ' --out ' + '\"' + destination + '\"', function(error, stdout, stderr){
         if(error){
           if(process.platform === 'win32'){
-            reject('It seems that mongo\'s bin is not in your environment path. Go to https://github.com/ngudbhav/excel-tomongodb to see the steps to rectify this issue.');
-            return callback('It seems that mongo\'s bin is not in your environment path. Go to https://github.com/ngudbhav/excel-tomongodb to see the steps to rectify this issue.');
+            reject('It seems that mongo\'s bin is not in your environment path. Go to https://github.com/ngudbhav/excel-to-mongodb to see the steps to rectify this issue.');
+            return callback('It seems that mongo\'s bin is not in your environment path. Go to https://github.com/ngudbhav/excel-to-mongodb to see the steps to rectify this issue.');
           }
           else{
             reject('There seems to be an issue with your mongodb installation as we are unable to find mongodump file in environment path.');
