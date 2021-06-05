@@ -17,6 +17,9 @@
       - run:
           name: install-npm-wee
           command: npm install
+      - run:
+          name: Install Mongoose module
+          command: npm install mongoose
       - save_cache:
           key: dependency-cache-{{ checksum "package.json" }}
           paths:
