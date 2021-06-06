@@ -2,9 +2,28 @@
 
 const excelToMongo = require('../src/index.js');
 
-const data = {
+function generateOutput(error, resultIsError, results) {
+	if(error) {
+		if (resultIsError) {
+			console.log(error);
+			console.log('\x1b[36m%s\x1b[0m', 'Passed!');
+		} else {
+			throw error;
+		}
+	}
+	else{
+		if (resultIsError) {
+			throw new Error('Failure! No error detected');
+		} else {
+			// console.log(results);
+			console.log('\x1b[36m%s\x1b[0m', 'Passed!');
+		}
+	}
+}
+
+const initialData = {
 	host: "localhost",
-	path: "test/test.csv",
+	path: "test/sample1.xlsx",
 	collection: "sample",
 	db: "ug",
 	user: "",
@@ -13,7 +32,7 @@ const data = {
 	endConnection: true,
 };
 
-const additionalOptions = {
+const initialOptions = {
 	safeMode:false,
 	verbose:true,
 	customStartEnd: false,
@@ -24,9 +43,28 @@ const additionalOptions = {
 	destination: '',
 };
 
-excelToMongo.covertToMongo(data, additionalOptions, function(error, results){
-	if(error) throw error;
-	else{
-		console.log(results);
-	}
-});
+async function convert(data, additionalOptions, resultIsError= false) {
+	await excelToMongo.covertToMongo(data, additionalOptions, function(error, results){
+		generateOutput(error, resultIsError, results);
+	});
+};
+
+(async function beginTest() {
+	// Sanity test for the end result
+	console.log('\x1b[36m%s\x1b[0m', 'Sanity test started');
+	// await convert(initialData, initialOptions);
+
+	// Authentication Error Test
+	initialData["user"] = 'ngudbhav';
+	console.log('\x1b[36m%s\x1b[0m', 'Authentication test started');
+	await convert(initialData, initialOptions, true);
+
+	initialData["pass"] = 'ngudbhav';
+	console.log('\x1b[36m%s\x1b[0m', 'Authentication test started');
+	// await convert(initialData, initialOptions, false);
+
+	// Invalid Database
+	initialData["db"] = undefined;
+	console.log('\x1b[36m%s\x1b[0m', 'Invalid DB test started');
+	// await convert(initialData, initialOptions, true);
+})();
