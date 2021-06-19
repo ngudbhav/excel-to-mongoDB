@@ -64,9 +64,15 @@ var credentials = {
 	host: host,
 	path: path for the excel file,
 	collection: Collection name for creation,
-	db: Your Database name
+	db: Your Database name,
+	user: username for authentication. Leave blank if no authentication required,
+	pass: password for authentication.
+	connection: Connection Object from mongodb client. Leave blank to create a connection,
+	endConnection*: 
 };
 ```
+
+* Please note that endConnection false may not terminate the process.
 
 The second one is an optional argument of options with default values as follows.
 
@@ -79,6 +85,7 @@ var options = {
 	endRow: <required> //Valid only if customStartEnd is true. Defines the end Row of the data.
 	startCol: <required> //Valid only if customStartEnd is true. Defines the start Column of the data.
 	endCol: <required> //Valid only if customStartEnd is true. Defines the end Column of the data.
+	destination: '' // Valid only if safeMoode is true. Defines the destination of the dump file of db
 }
 ```
 
