@@ -50,7 +50,7 @@ npm test
 
 ## Using
 
-Note: Please correctly format the excel sheet else this won't work.
+Note: Please correctly format the Excel sheet else this won't work.
 
 ```sh
 var excelMongo = require('excel-to-mongoDB');
@@ -85,8 +85,14 @@ var options = {
 The third argument is the callback function which should be executed.
 
 ```sh
-excelMongo.covertToMongo(credentials, options, callback); //returns documents inserted in the database.
+try {
+  excelMongo.covertToMongo(credentials, options, callback); //returns documents inserted in the database.
+} catch(error) {
+  throw error;
+}
 ```
+
+`try/catch` is always recommended because of the type of errors that can occur.
 
 ## Error in safeMode option
 
@@ -102,8 +108,8 @@ Linux/Unix Users please check your installation or .bashrc.
 
 ## Want to covert to MYSQL instead?
 
-We have got you covered! <a href="https://github.com/ngudbhav/excel-to-mysql">Github Link</a>.
+We have got you covered! <a href="https://github.com/ngudbhav/excel-to-mysql">GitHub Link</a>.
 
 ## Want to use the GUI instead?
 
-We have got you covered! <a href="https://github.com/ngudbhav/TriCo-electron-app">Github Link</a>.
+We have got you covered! <a href="https://github.com/ngudbhav/TriCo-electron-app">GitHub Link</a>.

@@ -62,7 +62,12 @@ const createModel = function(connection, schema, modelName){
   }
 }
 
-//Convert to mongodb
+/**
+ * Dumps data directly into collection
+ * @param data {object}
+ * @param options {object}
+ * @param callback {function}
+ */
 exports.covertToMongo = function(data, options, callback){
   //optional parameter 'options'
   if(typeof options === 'function'){
@@ -84,8 +89,9 @@ exports.covertToMongo = function(data, options, callback){
 
     //Try to connect with the provided credentials
     const connection = data.connection
-      ? data.connection
-      : mongoose.createConnection(connectionString, {user: data.user, pass: data.pass});
+      || mongoose.createConnection(connectionString, {
+        user: data.user, pass: data.pass,
+      });
 
     connection.on('error', function(error) {
       reject(error);
