@@ -9,9 +9,6 @@
       - run:
           name: Wait for Mongo to start
           command: dockerize -wait tcp://127.0.0.1:27017 -timeout 120s
-      - run:
-          name: update-npm
-          command: 'sudo npm install -g npm@latest'
       - restore_cache:
           key: dependency-cache-{{ checksum "package.json" }}
       - run:
