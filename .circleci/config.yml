@@ -4,6 +4,9 @@
     docker:
       - image: cimg/node:8.17
       - image: circleci/mongo:3.6
+        environment:
+          - MONGODB_USERNAME: ngudbhav
+          - MONGODB_PASSWORD: ngudbhav
     steps:
       - setup_remote_docker
       - checkout
@@ -22,9 +25,6 @@
           key: dependency-cache-{{ checksum "package.json" }}
           paths:
             - ./node_modules
-      - run:
-          name: Create custom user
-          command: mongo mydb_test --eval 'db.createUser({user:"ngudbhav",pwd:"ngudbhav",roles:["readWrite"]});'
       - run:
           name: test
           command: npm test
