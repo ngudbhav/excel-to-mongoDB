@@ -23,7 +23,7 @@
             - ./node_modules
       - run:
           name: Create custom user
-          command: mongo mydb_test --eval 'db.createUser({user:"ngudbhav",pwd:"ngudbhav",roles:["readWrite"]});'
+          command: docker run mongo mydb_test --eval 'db.createUser({user:"ngudbhav",pwd:"ngudbhav",roles:["readWrite"]});'
       - run:
           name: test
           command: npm test
