@@ -4,9 +4,6 @@
     docker:
       - image: cimg/node:8.17
       - image: circleci/mongo:3.6
-        environment:
-          - MONGODB_USERNAME: ngudbhav
-          - MONGODB_PASSWORD: ngudbhav
     steps:
       - setup_remote_docker
       - checkout
@@ -15,6 +12,13 @@
           command: dockerize -wait tcp://127.0.0.1:27017 -timeout 120s
       - restore_cache:
           key: dependency-cache-{{ checksum "package.json" }}
+      - run:
+          name: Install mongo client
+          command: |
+            sudo apt-get install -y mongodb
+      - run:
+          name: Connect to DB
+          command: mongo ug --eval 'db.createUser({user:"ngudbhav",pwd:"ngudbhav",roles:["readWrite"]});'
       - run:
           name: install-npm-wee
           command: npm install
