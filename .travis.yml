@@ -1,7 +1,10 @@
 language: node_js
 services:
   - mongodb
-before_script:
+before_install:
   - sleep 15
+  - mongo ug --eval 'db.createUser({user:"ngudbhav",pwd:"ngudbhav",roles:["readWrite"]});'
+  - npm install
+  - npm install mongoose
 node_js:
   - "8"

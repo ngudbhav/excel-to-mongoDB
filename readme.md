@@ -50,7 +50,7 @@ npm test
 
 ## Using
 
-Note: Please correctly format the excel sheet else this won't work.
+Note: Please correctly format the Excel sheet else this won't work.
 
 ```sh
 var excelMongo = require('excel-to-mongoDB');
@@ -64,9 +64,15 @@ var credentials = {
 	host: host,
 	path: path for the excel file,
 	collection: Collection name for creation,
-	db: Your Database name
+	db: Your Database name,
+	user: username for authentication. Leave blank if no authentication required,
+	pass: password for authentication.
+	connection: Connection Object from mongodb client. Leave blank to create a connection,
+	endConnection*: 
 };
 ```
+
+* Please note that endConnection false may not terminate the process.
 
 The second one is an optional argument of options with default values as follows.
 
@@ -79,14 +85,21 @@ var options = {
 	endRow: <required> //Valid only if customStartEnd is true. Defines the end Row of the data.
 	startCol: <required> //Valid only if customStartEnd is true. Defines the start Column of the data.
 	endCol: <required> //Valid only if customStartEnd is true. Defines the end Column of the data.
+	destination: '' // Valid only if safeMoode is true. Defines the destination of the dump file of db
 }
 ```
 
 The third argument is the callback function which should be executed.
 
 ```sh
-excelMongo.covertToMongo(credentials, options, callback); //returns documents inserted in the database.
+try {
+  excelMongo.covertToMongo(credentials, options, callback); //returns documents inserted in the database.
+} catch(error) {
+  throw error;
+}
 ```
+
+`try/catch` is always recommended because of the type of errors that can occur.
 
 ## Error in safeMode option
 
@@ -102,8 +115,8 @@ Linux/Unix Users please check your installation or .bashrc.
 
 ## Want to covert to MYSQL instead?
 
-We have got you covered! <a href="https://github.com/ngudbhav/excel-to-mysql">Github Link</a>.
+We have got you covered! <a href="https://github.com/ngudbhav/excel-to-mysql">GitHub Link</a>.
 
 ## Want to use the GUI instead?
 
-We have got you covered! <a href="https://github.com/ngudbhav/TriCo-electron-app">Github Link</a>.
+We have got you covered! <a href="https://github.com/ngudbhav/TriCo-electron-app">GitHub Link</a>.
