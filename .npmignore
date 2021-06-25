@@ -13,3 +13,4 @@ logs/
 webpack.config.js
 test/
 docs/
+.idea/
