@@ -85,7 +85,8 @@ exports.covertToMongo = function(data, options, callback){
     var eRow = 0;
     var sCol = 0;
     var eCol = 0;
-    const connectionString = 'mongodb://'+data.host+':27017/'+data.db;
+    const port = data.port || 27017;
+    const connectionString = 'mongodb://'+data.host+':'+port+'/'+data.db;
 
     //Try to connect with the provided credentials
     const connection = data.connection
