@@ -2,7 +2,7 @@
  jobs:
   build:
     docker:
-      - image: cimg/node:8.17
+      - image: cimg/node:12.19
       - image: circleci/mongo:3.6
     steps:
       - checkout
